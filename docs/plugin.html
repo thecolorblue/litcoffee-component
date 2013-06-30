@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>plugin.litcoffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="plugin.html">
+                plugin.litcoffee
+              </a>
+            
+              
+              <a class="source" href="test.html">
+                test.litcoffee
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>plugin.litcoffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p>This is a test of a number of technologies to see how they work. I am using a
+grunt script to compile coffeescript in literate mode into documentation
+(compiled with docco) and the js plugin. There is also a test file that has
+documentation in it and tests for the plugin.</p>
+<p>This is probably a good place to talk about how to get started. 
+You should already have a package.json file. Run &#39;npm install&#39; to install all of the dependencies for this project. Afterwards, you can run &#39;grunt&#39; to compile the plugin and &#39;docco src/* -0 docs/&#39; to compile the documentation (this file). Soon docco will be integrated with the grunt script but that is on the TODO list. </p>
+<p>In this file you will see the plugin broken up into classes and the methods on the class. Each should have a little explination of what they do. To see them in action head over to the test file, and the test file documentation. </p>
+<p>This is our global types object we will be attaching everything too. </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>types = {}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Tire size has a lot of functionality that should be attached to it. The
+constructor accepts a string, parses the string and sets up the object for
+quick lookup and comparing. We are doing a little magic here to get the size
+to return a string instead of an object.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Size = types.<span class="function"><span class="title">size</span></span> = (string)-&gt;
+	size = String(string)
+	sizeParts = string.exec <span class="regexp">///^(LT)(\d)/(\d)R(\d)///</span>
+
+	<span class="keyword">if</span> <span class="regexp">/\D/</span>.test size[<span class="number">0</span>]
+		prefix = size.shift()
+
+	size.width = size.shift()
+	size.diameter = size.shift()
+	size.weightLimit = size.shift()
+	size.prefix = prefix <span class="keyword">if</span> prefix
+	size.isP = <span class="property">@isP</span>.bind @
+	size.isLT = <span class="property">@isLT</span>.bind @
+	size</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>We want to easily filter out P and LT tire sizes. We create helpers for that.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Size.prototype.isP = ()-&gt;
+	<span class="property">@prefix</span> <span class="keyword">is</span> <span class="string">'P'</span>
+Size.prototype.isLT = ()-&gt;
+	<span class="property">@prefix</span> <span class="keyword">is</span> <span class="string">'LT'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Promotions for tires do not have as many functions and are mostly used as reference for the tire.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>type.<span class="function"><span class="title">promotion</span></span> = (obj = {})-&gt;
+	<span class="property">@when</span> = obj.<span class="keyword">when</span> <span class="keyword">if</span> obj.<span class="keyword">when</span>
+	<span class="property">@do</span> = obj.<span class="keyword">do</span> <span class="keyword">if</span> obj.<span class="keyword">do</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>And finally the tire, that will pull together these classes. We also set up a number of flags to make comparing easier.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>types.<span class="function"><span class="title">Tire</span></span> = (obj = {})-&gt;
+	<span class="property">@size</span> = types.size obj.size
+	<span class="property">@promotions</span> = []
+	<span class="property">@promotions</span>.push <span class="keyword">new</span> type.promotion promo <span class="keyword">for</span> promo <span class="keyword">in</span> obj.promotions
+	<span class="property">@bwStaggered</span>
+	<span class="property">@setFlags</span>()
+	<span class="property">@attributes</span> = obj
+	@</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>I am trying out bitwise comparisons. I have done some basic performance tests
+(<a href="http://jsperf.com/bitwise-compare">http://jsperf.com/bitwise-compare</a>) that show a good increase in performance
+when comparing multiple flags. In fact, multiple flags seems to be the same to
+compare as one flag, meaning we filter out winter tires, staggered sets and
+OEA tires very quickly. Some more testing should be done in this area.</p>
+<p>bwFlags is a combination of all the flags for this tire in one bit to make comparing faster.</p>
+<p>bits:</p>
+<ul>
+<li>winter</li>
+<li>3 season</li>
+<li>all season</li>
+<li>staggered</li>
+<li>hasPromotions</li>
+<li>OEM</li>
+<li>OEA</li>
+<li>P</li>
+<li>LT</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>types.Tire.prototype.setFlags = ()-&gt;
+	winterFlag = <span class="number">0x1</span> <span class="keyword">if</span> <span class="property">@attributes</span>.isWinter
+	threeSeasonFlag = <span class="number">0x2</span> <span class="keyword">if</span> <span class="property">@attributes</span>.season <span class="keyword">is</span> <span class="string">'3 season'</span>
+	allSeasonFlag = <span class="number">0x4</span> <span class="keyword">if</span> <span class="property">@attributes</span>.season <span class="keyword">is</span> <span class="string">'all season'</span>
+	staggeredFlag = <span class="number">0x8</span> <span class="keyword">if</span> <span class="property">@attributes</span>.staggered
+	promotionsFlag = <span class="number">0x16</span> <span class="keyword">if</span> <span class="property">@promotions</span>.length &gt; <span class="number">0</span>
+	oemFlag = <span class="number">0x32</span> <span class="keyword">if</span> <span class="property">@attributes</span>.program <span class="keyword">is</span> <span class="string">'OEM'</span>
+	oeaFlag = <span class="number">0x64</span> <span class="keyword">if</span> <span class="property">@attributes</span>.program <span class="keyword">is</span> <span class="string">'OEA'</span>
+	pFlag = <span class="number">0x128</span> <span class="keyword">if</span> <span class="property">@size</span>.isP()
+	ltFlag = <span class="number">0x256</span> <span class="keyword">if</span> <span class="property">@size</span>.isLT()
+
+	<span class="property">@bwFlags</span> = winterFlag | threeSeasonFlag | allSeasonFlag | staggeredFlag | promotionsFlag | oemFlag | oeaFlag
+	@</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
